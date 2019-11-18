@@ -237,7 +237,8 @@ class TestRestStore(object):
 
         with mock.patch('mlflow.utils.rest_utils.http_request') as mock_http:
             response = mock.MagicMock
-            response.text = '{"runs": ["1a", "2b", "3c"], "next_page_token": "67890fghij"}'
+            response.text = '{"runs": ["1a", "2b", "3c"], "next_page_token": "67890fghij",' \
+                            '"total_run_count": 3}'
             mock_http.return_value = response
             result = store.search_runs(["0", "1"], "params.p1 = 'a'", ViewType.ACTIVE_ONLY,
                                        max_results=10, order_by=["a"], page_token="12345abcde")
@@ -249,6 +250,7 @@ class TestRestStore(object):
                                   "runs/search", "POST",
                                   message_to_json(expected_message))
             assert result.token == "67890fghij"
+            assert result.total_run_count == 3
 
         with mock.patch('mlflow.utils.rest_utils.http_request') as mock_http:
             run_id = "run_id"
