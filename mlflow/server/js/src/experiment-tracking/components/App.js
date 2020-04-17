@@ -26,6 +26,7 @@ import { ModelVersionPage } from "../../model-registry/components/ModelVersionPa
 import ModelListPage from '../../model-registry/components/ModelListPage';
 import { ModelPage } from '../../model-registry/components/ModelPage';
 import CompareModelVersionsPage from "../../model-registry/components/CompareModelVersionsPage";
+import { AuthComponent } from "../../common/utils/AuthComponent";
 
 class App extends Component {
   render() {
@@ -63,6 +64,7 @@ class App extends Component {
               <Route exact path={Routes.metricPageRoute} component={MetricPage}/>
               <Route exact path={Routes.compareRunPageRoute} component={CompareRunPage}/>
               <Route path={Routes.experimentPageSearchRoute} component={HomePage}/>
+              <Route exact path={Routes.authRoute} component={AuthComponent}/>
               {/* TODO(Zangr) see if route component can be injected here */}
               <Route exact path={modelListPageRoute} component={ModelListPage}/>
               <Route exact path={modelVersionPageRoute} component={ModelVersionPage}/>

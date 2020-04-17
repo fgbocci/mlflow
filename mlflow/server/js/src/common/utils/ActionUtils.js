@@ -1,4 +1,6 @@
 import { ErrorCodes } from '../../common/constants';
+import { AuthService } from './AuthService';
+
 
 export const isPendingApi = (action) => {
   return action.type.endsWith("_PENDING");
@@ -61,6 +63,12 @@ export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000)
               (failureResponse) => reject(failureResponse)
             );
           }
+        }
+        if (xhr.status === 401) {
+          console.warn("Request failed with status 401");
+          const authService = new AuthService();
+          authService.redirectToSsoIfPossible(xhr);
+         
         }
         console.error("XHR failed", xhr);
         // We can't throw the XHR itself because it looks like a promise to the
