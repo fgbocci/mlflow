@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getTokenApi } from '../../experiment-tracking/actions';
 import { connect } from 'react-redux';
@@ -9,8 +9,15 @@ class AuthComponentImpl extends Component {
         code: PropTypes.string,
       };
 
-    componentWillMount() {
-      this.props.dispatchGetTokenApi(this.state.code);
+    componentDidMount = () => {
+      const token = this.props.dispatchGetTokenApi(this.state.code);
+      localStorage.setItem('token', token);
+      console.log('got token');
+      console.log(token);
+    }
+
+    render () {
+        return (<div></div>);
     }
   
 }
