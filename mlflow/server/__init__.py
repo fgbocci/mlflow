@@ -47,7 +47,7 @@ def serve_static_file(path):
 # Serve the index.html for the React App for all other routes.
 @app.route(_add_static_prefix('/'), defaults={'path': ''})
 @app.route('/<path:path>')
-def serve(path):
+def serve(path):  # pylint: disable=unused-argument
     return send_from_directory(STATIC_DIR, 'index.html')
 
 

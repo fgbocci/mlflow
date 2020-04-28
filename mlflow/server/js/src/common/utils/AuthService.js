@@ -27,7 +27,8 @@ export class AuthService {
     const logoutUrl = localStorage.getItem('logoutUrl');
     if (logoutUrl !== null) {
       return logoutUrl
-        + '&goto=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/');
+        + '&goto=' 
+        + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/');
     }
     return null;
   }
@@ -96,4 +97,3 @@ export class AuthService {
     }
   }
 }
-  

@@ -31,15 +31,14 @@ class AuthComponentImpl extends Component {
     req.open("GET", "/token?code=" + this.state.persistedState.code, false);
     req.send();
     if (req.status === 200) {
-      const token = req.getResponseHeader(req.getResponseHeader('Access-Control-Expose-Headers'))
-      localStorage.setItem('token', token)
+      const token = req.getResponseHeader(req.getResponseHeader('Access-Control-Expose-Headers'));
+      localStorage.setItem('token', token);
     }
   }
 
-  render () {
+  render() {
     return <Redirect to='/'/>;
   }
-  
 }
 
 export const AuthComponent = connect(null, null)(AuthComponentImpl);
