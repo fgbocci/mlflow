@@ -28,13 +28,12 @@ class AuthComponentImpl extends Component {
     //   console.log(localStorage.getItem('token'));
     // });
     const req = new XMLHttpRequest();
-    let ret = null;
     req.open("GET", "/token?code=" + this.state.persistedState.code, false);
     req.send();
     if (req.status === 200) {
-      localStorage.setItem('token', req.getResponseHeader(req.getResponseHeader('Access-Control-Expose-Headers')))
+      const token = req.getResponseHeader(req.getResponseHeader('Access-Control-Expose-Headers'))
+      localStorage.setItem('token', token)
     }
-    return ret;
   }
 
   render () {

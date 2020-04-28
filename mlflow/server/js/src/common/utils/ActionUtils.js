@@ -41,10 +41,10 @@ export const rejected = (apiActionType) => {
  */
 export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000) => {
   const token = localStorage.getItem("token");
-  if (token != null) {
+  if (token !== null) {
     $.ajaxSetup({
-      headers: { 'Authorization': token }
-    })
+      headers: { 'Authorization': token, }
+    });
   }
   return new Promise((resolve, reject) => {
     deferred({
@@ -75,7 +75,6 @@ export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000)
           console.warn("Request failed with status 401");
           const authService = new AuthService();
           authService.redirectToSsoIfPossible(xhr);
-         
         }
         console.error("XHR failed", xhr);
         // We can't throw the XHR itself because it looks like a promise to the
