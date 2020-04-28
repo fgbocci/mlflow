@@ -1,41 +1,46 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { getTokenApi } from '../../experiment-tracking/actions';
 import { connect } from 'react-redux';
+import Utils from "../../common/utils/Utils";
+import { Redirect } from 'react-router';
 
 class AuthComponentImpl extends Component {
-    static propTypes = {
-        dispatchGetTokenApi: PropTypes.func.isRequired,
-        code: PropTypes.string,
-      };
 
-    componentDidMount = () => {
-      const token = this.props.dispatchGetTokenApi(this.state.code);
-      localStorage.setItem('token', token);
-      console.log('got token');
-      console.log(token);
-    }
+  constructor(props) {
+    super(props);
+    const urlState = Utils.getSearchParamsFromUrl(props.location.search);
+    this.state = {
+      persistedState: {
+        code: urlState.code === undefined ? "" : urlState.code,
+      },
+    };
+  }
 
-    render () {
-        return (<div></div>);
+  componentDidMount = () => {
+    // const promise = getTokenApi(this.state.persistedState.code).payload
+    // console.log(promise)
+    // promise.then(response =>{
+    //   console.log(response)
+    //   console.log(response.headers.get('Access-Control-Expose-Headers'))
+    //   console.log(response.headers.get(response.headers.get('Access-Control-Expose-Headers')))
+    //   localStorage.setItem('token', response.headers.get(response.headers.get('Access-Control-Expose-Headers')))
+    //   console.log('got token');
+    //   console.log(localStorage.getItem('token'));
+    // });
+    const req = new XMLHttpRequest();
+    let ret = null;
+    req.open("GET", "/token?code=" + this.state.persistedState.code, false);
+    req.send();
+    if (req.status === 200) {
+      localStorage.setItem('token', req.getResponseHeader(req.getResponseHeader('Access-Control-Expose-Headers')))
     }
+    return ret;
+  }
+
+  render () {
+    return <Redirect to='/'/>;
+  }
   
 }
 
-const mapStateToProps = (state, ownProps) => {
-    const { match } = ownProps;
-    const code = match.params.code;
-    return {
-        code: code
-    }
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-      dispatchGetTokenApi: (code) => {
-        return dispatch(getTokenApi(code));
-      },
-    };
-};
-
-export const AuthComponent = connect(mapStateToProps, mapDispatchToProps)(AuthComponentImpl);
+export const AuthComponent = connect(null, null)(AuthComponentImpl);

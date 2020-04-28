@@ -1,5 +1,6 @@
 import { ErrorCodes } from '../../common/constants';
 import { AuthService } from './AuthService';
+import $ from 'jquery';
 
 
 export const isPendingApi = (action) => {
@@ -39,6 +40,12 @@ export const rejected = (apiActionType) => {
  * response from the server. Defaults to 1 second.
  */
 export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000) => {
+  const token = localStorage.getItem("token");
+  if (token != null) {
+    $.ajaxSetup({
+      headers: { 'Authorization': token }
+    })
+  }
   return new Promise((resolve, reject) => {
     deferred({
       data,

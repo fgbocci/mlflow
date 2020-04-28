@@ -390,7 +390,7 @@ export class MlflowService {
   static GetToken({ data, success, error}) {
     return $.ajax(Utils.getAjaxUrl('token'), {
       type: 'GET',
-      dataType: 'json',
+      dataType: 'text',
       converters: {
         'text json': StrictJsonBigInt.parse,
       },
