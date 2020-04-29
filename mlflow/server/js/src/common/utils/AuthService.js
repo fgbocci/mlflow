@@ -27,7 +27,7 @@ export class AuthService {
     const logoutUrl = localStorage.getItem('logoutUrl');
     if (logoutUrl !== null) {
       return logoutUrl
-        + '&goto=' 
+        + '&goto='
         + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/');
     }
     return null;

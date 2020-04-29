@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Utils from "../../common/utils/Utils";
 import { Redirect } from 'react-router';
+import PropTypes from 'prop-types';
 
 class AuthComponentImpl extends Component {
 
@@ -14,6 +15,10 @@ class AuthComponentImpl extends Component {
       },
     };
   }
+
+  static propTypes = {
+    location: PropTypes.object,
+  };
 
   componentDidMount = () => {
     const req = new XMLHttpRequest();
