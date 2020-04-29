@@ -43,7 +43,7 @@ export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000)
   const token = localStorage.getItem("token");
   if (token !== null) {
     $.ajaxSetup({
-      headers: { 'Authorization': token },
+      headers: { 'Authorization': token, }
     });
   }
   return new Promise((resolve, reject) => {
