@@ -4,7 +4,7 @@ import Utils from "../../common/utils/Utils";
 import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
 
-class AuthComponentImpl extends Component {
+export class AuthComponentImpl extends Component {
 
   constructor(props) {
     super(props);

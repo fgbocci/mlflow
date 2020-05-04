@@ -33,18 +33,6 @@ export class AuthService {
     return null;
   }
 
-  tryFetchTokenFromQueryParam(qpName) {
-    const urlParams = new URLSearchParams(document.location.search);
-    if (urlParams.has('token')) {
-      this.setNewToken(urlParams.get('token'));
-      urlParams.delete('token');
-      const otherParams = urlParams.toString();
-      otherParams !== ''
-        ? window.history.replaceState('', '', `?${urlParams.toString()}`)
-        : window.history.replaceState('', '', '');
-    }
-  }
-
   getToken() {
     return this.token;
   }
