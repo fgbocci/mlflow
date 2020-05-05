@@ -28,7 +28,8 @@ export class AuthService {
       return (
         logoutUrl +
         '&goto=' +
-        encodeURIComponent(window.location.protocol + '//' + window.location.host + '/'));
+        encodeURIComponent(window.location.protocol + '//' + window.location.host + '/')
+      );
     }
     return null;
   }
@@ -65,9 +66,11 @@ export class AuthService {
     const loginUrl = unauthorized.getResponseHeader(this.ssoLoginHeader);
     if (loginUrl !== null) {
       const fullSsoUrl =
-      loginUrl +
-      '&redirect_uri=' + encodeURIComponent(this.redirectUrl()) +
-      '&state=' + encodeURIComponent(this.toRedirectState);
+        loginUrl +
+        '&redirect_uri=' +
+        encodeURIComponent(this.redirectUrl()) +
+        '&state=' +
+        encodeURIComponent(this.toRedirectState);
       const logoutUrl = unauthorized.getResponseHeader(this.ssoLogoutHeader);
       if (logoutUrl !== null) {
         localStorage.setItem('logoutUrl', logoutUrl);

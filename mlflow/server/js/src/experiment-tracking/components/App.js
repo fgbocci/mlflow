@@ -53,13 +53,13 @@ class App extends Component {
           )}
           <AppErrorBoundary>
             <Switch>
-              <Route exact path={Routes.rootRoute} component={HomePage}/>
-              <Route exact path={Routes.experimentPageRoute} component={HomePage}/>
-              <Route exact path={Routes.runPageRoute} component={RunPage}/>
-              <Route exact path={Routes.metricPageRoute} component={MetricPage}/>
-              <Route exact path={Routes.compareRunPageRoute} component={CompareRunPage}/>
-              <Route path={Routes.experimentPageSearchRoute} component={HomePage}/>
-              <Route exact path={Routes.authRoute} component={AuthComponent}/>
+              <Route exact path={Routes.rootRoute} component={HomePage} />
+              <Route exact path={Routes.experimentPageRoute} component={HomePage} />
+              <Route exact path={Routes.runPageRoute} component={RunPage} />
+              <Route exact path={Routes.metricPageRoute} component={MetricPage} />
+              <Route exact path={Routes.compareRunPageRoute} component={CompareRunPage} />
+              <Route path={Routes.experimentPageSearchRoute} component={HomePage} />
+              <Route exact path={Routes.authRoute} component={AuthComponent} />
               {/* TODO(Zangr) see if route component can be injected here */}
               <Route exact path={modelListPageRoute} component={ModelListPage} />
               <Route exact path={modelVersionPageRoute} component={ModelVersionPage} />

@@ -225,6 +225,6 @@ export const getTokenApi = (code, id = getUUID()) => {
   return {
     type: GET_TOKEN_API,
     payload: wrapDeferred(MlflowService.GetToken, { code: code }),
-    meta: { id: id},
+    meta: { id: id },
   };
 };

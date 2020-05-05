@@ -386,7 +386,7 @@ export class MlflowService {
     });
   }
 
-  static GetToken({ data, success, error}) {
+  static GetToken({ data, success, error }) {
     return $.ajax(Utils.getAjaxUrl('token'), {
       type: 'GET',
       dataType: 'text',
