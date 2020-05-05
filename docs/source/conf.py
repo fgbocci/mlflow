@@ -13,6 +13,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import mlflow.version
 import sys
 import os
 
@@ -22,7 +23,6 @@ import os
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('.'))
 
-from languagesections import *
 
 # -- General configuration ------------------------------------------------
 
@@ -34,6 +34,7 @@ from languagesections import *
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinx_click.ext',
 ]
@@ -62,7 +63,6 @@ author = 'Databricks'
 # built documents.
 #
 
-import mlflow.version
 
 # The short X.Y version.
 version = mlflow.version.VERSION
@@ -228,17 +228,17 @@ htmlhelp_basename = 'MLflowdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-# 'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    # 'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-# 'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    # 'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-# 'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    # 'preamble': '',
 
-# Latex figure (float) alignment
-# 'figure_align': 'htbp',
+    # Latex figure (float) alignment
+    # 'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -248,6 +248,10 @@ latex_documents = [
     (master_doc, 'MLflow.tex', 'MLflow Documentation',
      'Databricks', 'manual'),
 ]
+
+# Mock torch & fastai imports as per suggestion in
+# https://github.com/sphinx-doc/sphinx/issues/6521#issuecomment-505765893
+autodoc_mock_imports = ["torch", "fastai"]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
@@ -310,7 +314,11 @@ texinfo_documents = [
 nitpicky = True
 nitpick_ignore = [
     # Ignore "parent class reference not found" errors for subclasses of ``object``
-    ('py:class', 'object'), ('py:class', 'json.encoder.JSONEncoder')
+    ('py:class', 'object'),
+    ('py:class', 'enum.Enum'),
+    ('py:class', 'bytes'),
+    ('py:class', 'bytearray'),
+    ('py:class', 'json.encoder.JSONEncoder'),
 ]
 
 linkcheck_ignore = [

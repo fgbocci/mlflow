@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RequestStateWrapper from '../../common/components/RequestStateWrapper';
-import { getExperimentApi, getRunApi, listArtifactsApi, setTagApi } from '../actions';
+import { getExperimentApi, getRunApi, setTagApi } from '../actions';
 import { searchModelVersionsApi } from '../../model-registry/actions';
 import { connect } from 'react-redux';
-import RunView from './RunView';
+import { RunView } from './RunView';
 import Routes from '../routes';
 import Utils from '../../common/utils/Utils';
 import { ErrorCodes } from '../../common/constants';
 import { RunNotFoundView } from './RunNotFoundView';
 import { getUUID } from '../../common/utils/ActionUtils';
 
-class RunPage extends Component {
+export class RunPageImpl extends Component {
   static propTypes = {
     runUuid: PropTypes.string.isRequired,
     experimentId: PropTypes.string.isRequired,
     modelVersions: PropTypes.arrayOf(Object),
     getRunApi: PropTypes.func.isRequired,
-    listArtifactsApi: PropTypes.func.isRequired,
     getExperimentApi: PropTypes.func.isRequired,
     searchModelVersionsApi: PropTypes.func.isRequired,
     setTagApi: PropTypes.func.isRequired,
@@ -25,14 +24,11 @@ class RunPage extends Component {
 
   getRunRequestId = getUUID();
 
-  listArtifactRequestId = getUUID();
-
   getExperimentRequestId = getUUID();
 
   searchModelVersionsRequestId = getUUID();
 
   setTagRequestId = getUUID();
-
 
   componentWillMount() {
     const { experimentId, runUuid } = this.props;
@@ -48,49 +44,33 @@ class RunPage extends Component {
       .then(() => getRunApi(runUuid, this.getRunRequestId));
   };
 
-  componentDidMount() {
-    const { runUuid } = this.props;
-    this.props.listArtifactsApi(runUuid, undefined, this.listArtifactRequestId);
-  }
+  renderRunView = (isLoading, shouldRenderError, requests, asyncRequests) => {
+    if (shouldRenderError) {
+      const getRunRequest = Utils.getRequestWithId(requests, this.getRunRequestId);
+      if (getRunRequest.error.getErrorCode() === ErrorCodes.RESOURCE_DOES_NOT_EXIST) {
+        return <RunNotFoundView runId={this.props.runUuid} />;
+      }
+      return null;
+    }
+
+    return (
+      <RunView
+        runUuid={this.props.runUuid}
+        getMetricPagePath={(key) =>
+          Routes.getMetricPageRoute([this.props.runUuid], key, this.props.experimentId)
+        }
+        experimentId={this.props.experimentId}
+        modelVersions={this.props.modelVersions}
+        handleSetRunTag={this.handleSetRunTag}
+      />
+    );
+  };
 
   render() {
+    const requestIds = [this.getRunRequestId, this.getExperimentRequestId];
     return (
       <div className='App-content'>
-        <RequestStateWrapper
-          requestIds={[
-            this.getRunRequestId,
-            this.getExperimentRequestId,
-          ]}
-          asyncRequestIds={[
-            this.listArtifactRequestId,
-          ]}
-        >
-          {(isLoading, shouldRenderError, requests, asyncRequests) => {
-            if (shouldRenderError) {
-              const getRunRequest = Utils.getRequestWithId(requests, this.getRunRequestId);
-              if (getRunRequest.error.getErrorCode() === ErrorCodes.RESOURCE_DOES_NOT_EXIST) {
-                return <RunNotFoundView runId={this.props.runUuid}/>;
-              }
-              return null;
-            }
-            const getArtifactsRequest = Utils.getRequestWithId(
-              asyncRequests, this.listArtifactRequestId
-            );
-            const artifactsLoading = getArtifactsRequest === undefined ?
-              true :
-              getArtifactsRequest.active === true;
-            return <RunView
-              runUuid={this.props.runUuid}
-              getMetricPagePath={(key) =>
-                Routes.getMetricPageRoute([this.props.runUuid], key, this.props.experimentId)
-              }
-              experimentId={this.props.experimentId}
-              artifactsAreLoading={artifactsLoading}
-              modelVersions={this.props.modelVersions}
-              handleSetRunTag={this.handleSetRunTag}
-            />;
-          }}
-        </RequestStateWrapper>
+        <RequestStateWrapper requestIds={requestIds}>{this.renderRunView}</RequestStateWrapper>
       </div>
     );
   }
@@ -110,10 +90,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
   getRunApi,
-  listArtifactsApi,
   getExperimentApi,
   searchModelVersionsApi,
   setTagApi,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RunPage);
+export const RunPage = connect(mapStateToProps, mapDispatchToProps)(RunPageImpl);

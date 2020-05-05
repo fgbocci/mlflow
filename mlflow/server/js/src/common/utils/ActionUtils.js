@@ -4,7 +4,7 @@ import $ from 'jquery';
 
 
 export const isPendingApi = (action) => {
-  return action.type.endsWith("_PENDING");
+  return action.type.endsWith('_PENDING');
 };
 
 export const pending = (apiActionType) => {
@@ -12,7 +12,7 @@ export const pending = (apiActionType) => {
 };
 
 export const isFulfilledApi = (action) => {
-  return action.type.endsWith("_FULFILLED");
+  return action.type.endsWith('_FULFILLED');
 };
 
 export const fulfilled = (apiActionType) => {
@@ -20,7 +20,7 @@ export const fulfilled = (apiActionType) => {
 };
 
 export const isRejectedApi = (action) => {
-  return action.type.endsWith("_REJECTED");
+  return action.type.endsWith('_REJECTED');
 };
 
 export const rejected = (apiActionType) => {
@@ -49,26 +49,34 @@ export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000)
   return new Promise((resolve, reject) => {
     deferred({
       data,
-      success: response => {
+      success: (response) => {
         resolve(response);
       },
       error: (xhr) => {
         if (xhr.status === 429) {
           if (timeLeftMs > 0) {
-            console.warn("Request failed with status code 429, message " +
-              new ErrorWrapper(xhr).getUserVisibleError() + ". Retrying after " +
-              sleepMs + " ms. On additional 429 errors, will continue to retry for up " +
-              "to " + timeLeftMs + " ms.");
+            console.warn(
+              'Request failed with status code 429, message ' +
+                new ErrorWrapper(xhr).getUserVisibleError() +
+                '. Retrying after ' +
+                sleepMs +
+                ' ms. On additional 429 errors, will continue to retry for up ' +
+                'to ' +
+                timeLeftMs +
+                ' ms.',
+            );
             // Retry the request, subtracting the current sleep duration from the remaining time
             // and doubling the sleep duration
             const newTimeLeft = timeLeftMs - sleepMs;
             const newSleepMs = Math.min(newTimeLeft, sleepMs * 2);
-            return new Promise(resolveRetry => setTimeout(resolveRetry, sleepMs)).then(() => {
-              return wrapDeferred(deferred, data, newTimeLeft, newSleepMs);
-            }).then(
-              (successResponse) => resolve(successResponse),
-              (failureResponse) => reject(failureResponse)
-            );
+            return new Promise((resolveRetry) => setTimeout(resolveRetry, sleepMs))
+              .then(() => {
+                return wrapDeferred(deferred, data, newTimeLeft, newSleepMs);
+              })
+              .then(
+                (successResponse) => resolve(successResponse),
+                (failureResponse) => reject(failureResponse),
+              );
           }
         }
         if (xhr.status === 401) {
@@ -116,10 +124,10 @@ export class ErrorWrapper {
           return responseText;
         }
       } catch (e) {
-        return "INTERNAL_SERVER_ERROR";
+        return 'INTERNAL_SERVER_ERROR';
       }
     }
-    return "INTERNAL_SERVER_ERROR";
+    return 'INTERNAL_SERVER_ERROR';
   }
 
   getMessageField() {
@@ -131,10 +139,10 @@ export class ErrorWrapper {
           return parsed.message;
         }
       } catch (e) {
-        return "INTERNAL_SERVER_ERROR";
+        return 'INTERNAL_SERVER_ERROR';
       }
     }
-    return "INTERNAL_SERVER_ERROR";
+    return 'INTERNAL_SERVER_ERROR';
   }
 }
 

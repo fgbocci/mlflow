@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Icon } from 'antd';
+import { Icon, Button } from 'antd';
 import './ExperimentListView.css';
 import { getExperiments } from '../reducers/Reducers';
 import { Experiment } from '../sdk/MlflowMessages';
@@ -152,40 +152,49 @@ export class ExperimentListView extends Component {
           <div className='experiment-list-container' style={{ height: experimentListHeight }}>
             {this.props.experiments
               // filter experiments based on searchInput
-              .filter((exp) => exp.getName().toLowerCase().includes(searchInput.toLowerCase()))
+              .filter((exp) =>
+                exp
+                  .getName()
+                  .toLowerCase()
+                  .includes(searchInput.toLowerCase()),
+              )
               .map((exp, idx) => {
                 const { name, experiment_id } = exp;
-                const active = this.props.activeExperimentId !== undefined
+                const active =
+                  this.props.activeExperimentId !== undefined
                     ? experiment_id === this.props.activeExperimentId
                     : idx === 0;
-                const className =
-                  `experiment-list-item ${active ? 'active-experiment-list-item' : ''}`;
+                const className = `experiment-list-item ${
+                  active ? 'active-experiment-list-item' : ''
+                }`;
                 return (
                   <div key={experiment_id} title={name} className={`header-container ${className}`}>
                     <Link
                       style={{ textDecoration: 'none', color: 'unset', width: '80%' }}
                       to={Routes.getExperimentPageRoute(experiment_id)}
-                      onClick={active ? ev => ev.preventDefault() : ev => ev}
+                      onClick={active ? (ev) => ev.preventDefault() : (ev) => ev}
                     >
                       <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</div>
                     </Link>
                     {/* Edit/Rename Experiment Option */}
-                    <a
+                    <Button
+                      type='link'
                       onClick={this.handleRenameExperiment}
                       data-experimentid={experiment_id}
                       data-experimentname={name}
                       style={{ marginRight: 10 }}
                     >
                       <Icon type='edit' />
-                    </a>
+                    </Button>
                     {/* Delete Experiment option */}
-                    <a
+                    <Button
+                      type='link'
                       onClick={this.handleDeleteExperiment}
                       data-experimentid={experiment_id}
                       data-experimentname={name}
                     >
                       <i className='far fa-trash-alt' />
-                    </a>
+                    </Button>
                   </div>
                 );
               })}
