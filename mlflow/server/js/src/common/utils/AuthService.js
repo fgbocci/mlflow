@@ -1,5 +1,4 @@
 export class AuthService {
-
   token = null;
   toRedirectState = '';
   ssoLoginHeader = 'X-SSO-Login';
@@ -26,9 +25,10 @@ export class AuthService {
   getFullLogoutUrl() {
     const logoutUrl = localStorage.getItem('logoutUrl');
     if (logoutUrl !== null) {
-      return logoutUrl
-        + '&goto='
-        + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/');
+      return (
+        logoutUrl +
+        '&goto=' +
+        encodeURIComponent(window.location.protocol + '//' + window.location.host + '/'));
     }
     return null;
   }
@@ -64,9 +64,10 @@ export class AuthService {
   getSsoUrl(unauthorized) {
     const loginUrl = unauthorized.getResponseHeader(this.ssoLoginHeader);
     if (loginUrl !== null) {
-      const fullSsoUrl = loginUrl
-        + '&redirect_uri=' + encodeURIComponent(this.redirectUrl())
-        + '&state=' + encodeURIComponent(this.toRedirectState);
+      const fullSsoUrl =
+      loginUrl +
+      '&redirect_uri=' + encodeURIComponent(this.redirectUrl()) +
+      '&state=' + encodeURIComponent(this.toRedirectState);
       const logoutUrl = unauthorized.getResponseHeader(this.ssoLogoutHeader);
       if (logoutUrl !== null) {
         localStorage.setItem('logoutUrl', logoutUrl);

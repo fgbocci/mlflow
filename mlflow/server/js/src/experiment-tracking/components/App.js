@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import logo from '../../common/static/home-logo.png';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import RunPage from './RunPage';
 import Routes from '../routes';
 import { MetricPage } from './MetricPage';
@@ -25,8 +21,8 @@ import {
 import { ModelVersionPage } from '../../model-registry/components/ModelVersionPage';
 import ModelListPage from '../../model-registry/components/ModelListPage';
 import { ModelPage } from '../../model-registry/components/ModelPage';
-import CompareModelVersionsPage from "../../model-registry/components/CompareModelVersionsPage";
-import { AuthComponent } from "../../common/utils/AuthComponent";
+import CompareModelVersionsPage from '../../model-registry/components/CompareModelVersionsPage';
+import { AuthComponent } from '../../common/utils/AuthComponent';
 
 class App extends Component {
   render() {

@@ -2,7 +2,6 @@ import { ErrorCodes } from '../../common/constants';
 import { AuthService } from './AuthService';
 import $ from 'jquery';
 
-
 export const isPendingApi = (action) => {
   return action.type.endsWith('_PENDING');
 };
@@ -40,10 +39,10 @@ export const rejected = (apiActionType) => {
  * response from the server. Defaults to 1 second.
  */
 export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token !== null) {
     $.ajaxSetup({
-      headers: { 'Authorization': token },
+      headers: { Authorization: token },
     });
   }
   return new Promise((resolve, reject) => {
@@ -80,11 +79,11 @@ export const wrapDeferred = (deferred, data, timeLeftMs = 60000, sleepMs = 1000)
           }
         }
         if (xhr.status === 401) {
-          console.warn("Request failed with status 401");
+          console.warn('Request failed with status 401');
           const authService = new AuthService();
           authService.redirectToSsoIfPossible(xhr);
         }
-        console.error("XHR failed", xhr);
+        console.error('XHR failed', xhr);
         // We can't throw the XHR itself because it looks like a promise to the
         // redux-promise-middleware.
         return reject(new ErrorWrapper(xhr));

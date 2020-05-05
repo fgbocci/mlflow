@@ -15,13 +15,11 @@ afterEach(() => {
 });
 
 const getAuthComponentMock = () => {
-  return shallow(<AuthComponentImpl
-  location={location}
-  />);
+  return shallow(<AuthComponentImpl location={location} />);
 };
 
 test('Token should be in local storage after render', () => {
-  location.search = "code=code";
+  location.search = 'code=code';
   XMLHttpRequest.mockImplementation(() => ({
     open: jest.fn(),
     send: jest.fn(),
