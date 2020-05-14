@@ -105,7 +105,7 @@ def test_http_request_with_token(request):
 def test_http_request_with_token_refresh(request):
     host_only = MlflowHostCreds("http://my-host", token='my-token')
 
-    def refresh_token(force_refresh_token=False):
+    def refresh_token(force_refresh_token=False):  # pylint: disable=unused-argument
         return MlflowHostCreds("http://my-host", token='my-token-2')
 
     response = mock.MagicMock()

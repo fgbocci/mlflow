@@ -135,7 +135,7 @@ class TestRestStore(object):
         request.return_value = response
         creds = MlflowHostCreds('https://hello')
 
-        def generate_creds(force_refresh_token=False):
+        def generate_creds(force_refresh_token=False):  # pylint: disable=unused-argument
             return creds
         store = RestStore(generate_creds)
 
@@ -287,7 +287,7 @@ class TestRestStore(object):
     def test_get_experiment_by_name(self, store_class):
         creds = MlflowHostCreds('https://hello')
 
-        def generate_creds(force_refresh_token=False):
+        def generate_creds(force_refresh_token=False):  # pylint: disable=unused-argument
             return creds
         store = store_class(generate_creds)
         with mock.patch('mlflow.utils.rest_utils.http_request') as mock_http:
@@ -370,7 +370,7 @@ class TestRestStore(object):
     def test_databricks_rest_store_get_experiment_by_name(self):
         creds = MlflowHostCreds('https://hello')
 
-        def generate_creds(force_refresh_token=False):
+        def generate_creds(force_refresh_token=False):  # pylint: disable=unused-argument
             return creds
         store = DatabricksRestStore(generate_creds)
         with mock.patch('mlflow.utils.rest_utils.http_request') as mock_http:
