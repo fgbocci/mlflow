@@ -66,6 +66,20 @@ class TestRestStore(object):
         assert "RESOURCE_DOES_NOT_EXIST: No experiment" in str(cm.value)
 
     @mock.patch('requests.request')
+    def test_not_authorized_http_request(self, request):
+        response = mock.MagicMock
+        response.status_code = 401
+        response.text = '{"message": "Not authorized"}'
+        request.return_value = response
+
+        generate_token = mock.MagicMock()
+        store = RestStore(generate_token)
+        with pytest.raises(MlflowException) as cm:
+            store.list_experiments()
+        assert "INTERNAL_ERROR: Not authorized" in str(cm.value)
+        generate_token.assert_called_with(force_refresh_token=True)
+
+    @mock.patch('requests.request')
     def test_failed_http_request_custom_handler(self, request):
         response = mock.MagicMock
         response.status_code = 404
@@ -355,7 +369,7 @@ class TestRestStore(object):
 
     def test_databricks_rest_store_get_experiment_by_name(self):
         creds = MlflowHostCreds('https://hello')
-        
+
         def generate_creds(force_refresh_token=False):
             return creds
         store = DatabricksRestStore(generate_creds)
