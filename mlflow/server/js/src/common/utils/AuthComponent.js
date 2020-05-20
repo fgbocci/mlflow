@@ -11,6 +11,7 @@ export class AuthComponentImpl extends Component {
     this.state = {
       persistedState: {
         code: urlState.code === undefined ? '' : urlState.code,
+        redirectState: urlState.state === undefined ? '/' : urlState.state
       },
     };
   }
@@ -24,13 +25,14 @@ export class AuthComponentImpl extends Component {
     req.open('GET', '/token?code=' + this.state.persistedState.code, false);
     req.send();
     if (req.status === 200) {
-      const token = req.getResponseHeader(req.getResponseHeader('Access-Control-Expose-Headers'));
+      const token = req.getResponseHeader('X-JWT-Token');
       localStorage.setItem('token', token);
     }
+    console.error('XHR to get token failed', req.responseText);
   };
 
   render() {
-    return <Redirect to='/' />;
+    return <Redirect to={this.state.persistedState.redirectState} />;
   }
 }
 

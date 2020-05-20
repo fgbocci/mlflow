@@ -10,6 +10,7 @@ export class AuthService {
     if (savedToken !== null) {
       this.token = savedToken;
     }
+    this.toRedirectState = window.location.pathname;
   }
 
   logOff() {
