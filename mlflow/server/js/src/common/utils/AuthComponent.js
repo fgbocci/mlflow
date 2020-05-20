@@ -11,7 +11,7 @@ export class AuthComponentImpl extends Component {
     this.state = {
       persistedState: {
         code: urlState.code === undefined ? '' : urlState.code,
-        redirectState: urlState.state === undefined ? '/' : urlState.state
+        redirectState: urlState.state === undefined ? '/' : urlState.state,
       },
     };
   }
