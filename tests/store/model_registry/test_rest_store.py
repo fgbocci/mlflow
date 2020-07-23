@@ -173,7 +173,7 @@ class TestRestStore(unittest.TestCase):
         self._verify_requests(mock_http, "model-versions/create", "POST",
                               CreateModelVersion(name="model_1", source="path/to/source",
                                                  run_id=run_id, run_link=run_link,
-                                                 tags=[tag.to_proto() for tag in tags]))
+                                                 tags=[tag.to_proto() for tag in tags]),
                               self.generate_creds)
 
 
