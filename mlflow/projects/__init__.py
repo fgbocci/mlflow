@@ -97,7 +97,7 @@ def _run(uri, experiment_id, entry_point, version, parameters,
         backend = loader.load_backend(backend_name)
         if backend:
             submitted_run = backend.run(uri, entry_point, parameters,
-                                        version, backend_config, experiment_id, tracking_store_uri)
+                                        version, backend_config, tracking_store_uri, experiment_id)
             tracking.MlflowClient().set_tag(submitted_run.run_id, MLFLOW_PROJECT_BACKEND,
                                             backend_name)
             return submitted_run
@@ -188,7 +188,34 @@ def _run(uri, experiment_id, entry_point, version, parameters,
         )
         return submitted_run
 
-    supported_backends = ["local", "databricks", "kubernetes"]
+    elif backend == "yarn":
+        from mlflow.projects import yarn
+        entry_point_command = _get_entry_point_command(project, entry_point,
+                                                       parameters, storage_dir)
+        conda_env_name = _get_or_create_conda_env(project.conda_env_path)
+        yarn._validate_yarn_env(project)
+        tracking.MlflowClient().set_tag(active_run.info.run_id, MLFLOW_PROJECT_BACKEND, "yarn")
+        submitted_run = yarn.run_yarn_job(
+            remote_run=active_run,
+            work_dir=work_dir,
+            parameters=parameters,
+            experiment_id=experiment_id,
+            cluster_spec=backend_config,
+            conda_env_name=conda_env_name,
+            entry_point_command=entry_point_command[0],
+            run_env_vars=_get_run_env_vars(
+                run_id=active_run.info.run_uuid,
+                experiment_id=active_run.info.experiment_id
+            )
+        )
+
+        tracking.MlflowClient().set_tag(active_run.info.run_id,
+                                        yarn.YARN_APPLICATION_ID,
+                                        submitted_run._skein_app_id)
+
+        return submitted_run
+
+    supported_backends = ["local", "databricks", "kubernetes", "yarn"]
     raise ExecutionException("Got unsupported execution mode %s. Supported "
                              "values: %s" % (backend_name, supported_backends))
 
