@@ -39,7 +39,7 @@ if os.getenv(PROMETHEUS_EXPORTER_ENV_VAR):
 
 
 # Provide a health check endpoint to ensure the application is responsive
-@app.route("/health")
+@app.route("/ping")
 def health():
     return "OK", 200
 
